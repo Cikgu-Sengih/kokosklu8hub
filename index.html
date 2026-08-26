@@ -10,16 +10,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Gaya butang tab apabila dipilih (Aktif) */
         .nav-btn.active {
-            color: #047857;
-            border-bottom: 3px solid #047857;
-            font-weight: 700;
+            background-color: #047857 !important;
+            color: #ffffff !important;
+            border-color: #047857 !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .nav-btn.active i {
+            color: #ffffff !important;
         }
     </style>
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col items-center">
 
-    <!-- Butang Install PWA (Automatik keluar di peranti yang menyokong) -->
+    <!-- Butang Install PWA -->
     <div id="installBanner" class="hidden w-full max-w-lg bg-emerald-700 text-white p-3 px-4 flex justify-between items-center shadow-lg">
         <div class="flex items-center space-x-2 text-xs font-semibold">
             <i class="fa-solid fa-mobile-screen-button text-base"></i>
@@ -34,37 +39,67 @@
     <div class="w-full max-w-lg bg-white min-h-screen shadow-lg flex flex-col">
         
         <!-- Header Banner Rasmi Unit Kokurikulum -->
-        <header class="bg-gradient-to-r from-emerald-900 via-teal-800 to-emerald-900 text-white p-6 text-center rounded-b-3xl shadow-md">
-            <div class="w-16 h-16 bg-white rounded-full mx-auto mb-2 flex items-center justify-center shadow-inner border-2 border-emerald-300">
-                <i class="fa-solid fa-trophy text-3xl text-emerald-800"></i>
+        <header class="bg-gradient-to-r from-emerald-900 via-teal-800 to-emerald-900 text-white p-5 text-center rounded-b-3xl shadow-md">
+            <div class="w-14 h-14 bg-white rounded-full mx-auto mb-2 flex items-center justify-center shadow-inner border-2 border-emerald-300">
+                <i class="fa-solid fa-trophy text-2xl text-emerald-800"></i>
             </div>
-            <h1 class="text-lg font-extrabold uppercase tracking-wide">PORTAL KOKURIKULUM</h1>
-            <p class="text-xs text-emerald-200 mt-0.5">Pusat Pengurusan & Maklumat Kokurikulum Sekolah</p>
+            <h1 class="text-base font-extrabold uppercase tracking-wide">PORTAL KOKURIKULUM</h1>
+            <p class="text-[11px] text-emerald-200 mt-0.5">Pusat Pengurusan & Maklumat Kokurikulum Sekolah</p>
         </header>
 
-        <!-- Menu Navigasi Tab Bertatal (Scrollable Navigation) -->
-        <nav class="flex border-b border-slate-200 bg-slate-50 text-xs font-medium overflow-x-auto whitespace-nowrap scrollbar-none px-2">
-            <button onclick="switchTab('utama')" id="tab-utama" class="nav-btn active px-4 py-3 text-center">
-                <i class="fa-solid fa-house block text-sm mb-0.5"></i> Utama
-            </button>
-            <button onclick="switchTab('penglibatan')" id="tab-penglibatan" class="nav-btn px-4 py-3 text-center">
-                <i class="fa-solid fa-award block text-sm mb-0.5"></i> Penglibatan Murid
-            </button>
-            <button onclick="switchTab('datakoko')" id="tab-datakoko" class="nav-btn px-4 py-3 text-center">
-                <i class="fa-solid fa-users-rectangle block text-sm mb-0.5"></i> Data Kokurikulum
-            </button>
-            <button onclick="switchTab('pajsk')" id="tab-pajsk" class="nav-btn px-4 py-3 text-center">
-                <i class="fa-solid fa-chart-simple block text-sm mb-0.5"></i> Data PAJSK
-            </button>
-            <button onclick="switchTab('opr')" id="tab-opr" class="nav-btn px-4 py-3 text-center">
-                <i class="fa-solid fa-file-lines block text-sm mb-0.5"></i> OPR (Laporan)
-            </button>
-            <button onclick="requestAccess('guru')" id="tab-guru" class="nav-btn px-4 py-3 text-center text-amber-700">
-                <i class="fa-solid fa-lock block text-sm mb-0.5"></i> Guru Koko
-            </button>
-            <button onclick="requestAccess('admin')" id="tab-admin" class="nav-btn px-4 py-3 text-center text-red-700">
-                <i class="fa-solid fa-shield-halved block text-sm mb-0.5"></i> Admin / PK Koko
-            </button>
+        <!-- MENU NAVIGASI 2 LAJUR (GRID) -->
+        <nav class="p-3 bg-slate-50 border-b border-slate-200">
+            <div class="grid grid-cols-2 gap-2 text-xs font-medium">
+                
+                <!-- Butang Tab Utama (Memanjang 2 Lajur Penuh) -->
+                <button onclick="switchTab('utama')" id="tab-utama" class="nav-btn active col-span-2 p-2.5 bg-white border border-slate-200 rounded-xl flex items-center justify-center space-x-2 text-slate-700 shadow-sm transition">
+                    <i class="fa-solid fa-house text-emerald-700 text-sm"></i>
+                    <span class="font-bold">Laman Utama</span>
+                </button>
+
+                <!-- Lajur 1: Penglibatan Murid -->
+                <button onclick="switchTab('penglibatan')" id="tab-penglibatan" class="nav-btn p-2.5 bg-white border border-slate-200 rounded-xl flex items-center space-x-2 text-slate-700 shadow-sm transition hover:bg-emerald-50">
+                    <i class="fa-solid fa-award text-blue-600 text-base"></i>
+                    <span class="text-left leading-tight">Penglibatan Murid</span>
+                </button>
+
+                <!-- Lajur 2: Data Kokurikulum -->
+                <button onclick="switchTab('datakoko')" id="tab-datakoko" class="nav-btn p-2.5 bg-white border border-slate-200 rounded-xl flex items-center space-x-2 text-slate-700 shadow-sm transition hover:bg-emerald-50">
+                    <i class="fa-solid fa-users-rectangle text-emerald-600 text-base"></i>
+                    <span class="text-left leading-tight">Data Kokurikulum</span>
+                </button>
+
+                <!-- Lajur 1: Data PAJSK -->
+                <button onclick="switchTab('pajsk')" id="tab-pajsk" class="nav-btn p-2.5 bg-white border border-slate-200 rounded-xl flex items-center space-x-2 text-slate-700 shadow-sm transition hover:bg-emerald-50">
+                    <i class="fa-solid fa-chart-simple text-amber-600 text-base"></i>
+                    <span class="text-left leading-tight">Data PAJSK</span>
+                </button>
+
+                <!-- Lajur 2: OPR (Laporan) -->
+                <button onclick="switchTab('opr')" id="tab-opr" class="nav-btn p-2.5 bg-white border border-slate-200 rounded-xl flex items-center space-x-2 text-slate-700 shadow-sm transition hover:bg-emerald-50">
+                    <i class="fa-solid fa-file-lines text-teal-600 text-base"></i>
+                    <span class="text-left leading-tight">OPR (Laporan)</span>
+                </button>
+
+                <!-- Lajur 1: Guru Koko (PIN) -->
+                <button onclick="requestAccess('guru')" id="tab-guru" class="nav-btn p-2.5 bg-white border border-slate-200 rounded-xl flex items-center justify-between text-slate-700 shadow-sm transition hover:bg-amber-50">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-chalkboard-user text-amber-600 text-base"></i>
+                        <span class="text-left leading-tight">Guru Koko</span>
+                    </div>
+                    <i class="fa-solid fa-lock text-[10px] text-amber-600"></i>
+                </button>
+
+                <!-- Lajur 2: Admin / PK Koko (PIN) -->
+                <button onclick="requestAccess('admin')" id="tab-admin" class="nav-btn p-2.5 bg-white border border-slate-200 rounded-xl flex items-center justify-between text-slate-700 shadow-sm transition hover:bg-red-50">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-shield-halved text-red-600 text-base"></i>
+                        <span class="text-left leading-tight">PK Koko / Admin</span>
+                    </div>
+                    <i class="fa-solid fa-lock text-[10px] text-red-600"></i>
+                </button>
+
+            </div>
         </nav>
 
         <!-- Ruang Kandungan Tab -->
@@ -74,10 +109,10 @@
             <section id="content-utama" class="space-y-4">
                 <div class="bg-emerald-50 border-l-4 border-emerald-600 p-3 rounded-lg text-xs text-emerald-900">
                     <p class="font-bold"><i class="fa-solid fa-bullhorn mr-1"></i> Pengumuman Unit Kokurikulum</p>
-                    <p class="mt-1">Perjumpaan aktiviti kokurikulum dijalankan pada setiap hari <b>Rabu (12:45 Tengah Hari - 1:45 Tengah Hari)</b> mengikut giliran Unit Beruniform, Kelab & Persatuan, dan Sukan Permainan.</p>
+                    <p class="mt-1">Perjumpaan aktiviti kokurikulum dijalankan pada setiap hari <b>Rabu (12.45 Tengah Hari - 2.45 Petang)</b> mengikut jadual giliran mingguan unit masing-masing.</p>
                 </div>
 
-                <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Akses Pantas 3 Teras Utama</h2>
+                <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wider">3 Teras Utama Kokurikulum</h2>
                 <div class="grid grid-cols-3 gap-2 text-center text-xs">
                     <div class="p-3 bg-slate-50 border rounded-xl flex flex-col items-center">
                         <i class="fa-solid fa-person-military-pointing text-2xl text-emerald-600 mb-1"></i>
@@ -89,12 +124,12 @@
                     </div>
                     <div class="p-3 bg-slate-50 border rounded-xl flex flex-col items-center">
                         <i class="fa-solid fa-futbol text-2xl text-amber-600 mb-1"></i>
-                        <span class="font-bold text-[11px]">1 Murid 1 Sukan</span>
+                        <span class="font-bold text-[11px]">1M1S Sukan</span>
                     </div>
                 </div>
 
                 <div class="bg-white border rounded-xl p-4 shadow-sm">
-                    <h3 class="text-xs font-bold text-slate-800 uppercase mb-2">Maklumat Penting & Pautan Rasmi</h3>
+                    <h3 class="text-xs font-bold text-slate-800 uppercase mb-2">Pautan Pantas Rasmi</h3>
                     <div class="space-y-2 text-xs">
                         <a href="https://pajsk.moe.gov.my" target="_blank" class="flex justify-between items-center p-2.5 bg-slate-50 rounded-lg hover:bg-emerald-50 transition">
                             <span class="font-semibold text-slate-700"><i class="fa-solid fa-globe text-emerald-600 mr-2"></i> Portal Rasmi PAJSK KPM</span>
@@ -118,7 +153,7 @@
                 <div class="p-4 bg-slate-50 border rounded-xl text-center space-y-3">
                     <i class="fa-solid fa-medal text-4xl text-blue-600"></i>
                     <h3 class="font-bold text-sm text-slate-800">Sistem Penglibatan Murid</h3>
-                    <p class="text-xs text-slate-600">Klik butang di bawah untuk membuka borang/sistem semakan penglibatan murid dalam paparan penuh:</p>
+                    <p class="text-xs text-slate-600">Klik butang di bawah untuk membuka sistem semakan dan penglibatan murid dalam paparan penuh:</p>
                     <a href="https://script.google.com/a/macros/moe-dl.edu.my/s/AKfycbzjLAcsk146B645GC2vFImq7Smv8utDjPdWocsyFp5UJuSrENnmIMJT3HGtzKHd_K1h/exec" target="_blank" class="inline-flex items-center space-x-2 bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow transition">
                         <i class="fa-solid fa-up-right-from-square"></i>
                         <span>Buka Sistem Penglibatan Murid</span>
@@ -147,8 +182,8 @@
             <!-- 4. TAB DATA PAJSK -->
             <section id="content-pajsk" class="hidden space-y-3">
                 <div class="bg-amber-50 border-l-4 border-amber-600 p-3 rounded-lg text-xs text-amber-900">
-                    <p class="font-bold"><i class="fa-solid fa-calculator mr-1"></i> Pentaksiran Aktiviti Jasmani, Sukan & Kokurikulum</p>
-                    <p class="mt-1">Panduan markah dan pengisian sistem pentaksiran PAJSK sekolah rendah (Tahun 4, 5, dan 6).</p>
+                    <p class="font-bold"><i class="fa-solid fa-calculator mr-1"></i> Pentaksiran PAJSK Sekolah Rendah</p>
+                    <p class="mt-1">Panduan markah dan pengisian sistem pentaksiran PAJSK KPM (Tahun 4, 5, dan 6).</p>
                 </div>
 
                 <div class="space-y-2">
@@ -158,7 +193,7 @@
                                 <i class="fa-solid fa-server text-xl text-amber-600"></i>
                                 <div>
                                     <p class="text-xs font-bold text-slate-800">Sistem Log Masuk PAJSK Online</p>
-                                    <p class="text-[10px] text-slate-500">Kemasukan markah oleh Guru Penasihat & Penyelaras</p>
+                                    <p class="text-[10px] text-slate-500">Kemasukan markah oleh Guru Penasihat</p>
                                 </div>
                             </div>
                             <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
@@ -186,7 +221,7 @@
                                 <i class="fa-solid fa-file-pen text-xl text-teal-700"></i>
                                 <div>
                                     <p class="text-xs font-bold text-slate-800">Hantar Laporan Mingguan (OPR)</p>
-                                    <p class="text-[10px] text-slate-500">Isi borang Google Form laporan mingguan unit anda</p>
+                                    <p class="text-[10px] text-slate-500">Isi borang laporan aktiviti mingguan unit anda</p>
                                 </div>
                             </div>
                             <i class="fa-solid fa-plus text-slate-400 text-xs"></i>
@@ -197,8 +232,8 @@
                             <div class="flex items-center space-x-3">
                                 <i class="fa-brands fa-google-drive text-xl text-amber-600"></i>
                                 <div>
-                                    <p class="text-xs font-bold text-slate-800">Arkib Fail & Gambar Aktiviti (Drive)</p>
-                                    <p class="text-[10px] text-slate-500">Folder simpanan gambar dokumentasi sekolah</p>
+                                    <p class="text-xs font-bold text-slate-800">Folder Simpanan Bergambar (Drive)</p>
+                                    <p class="text-[10px] text-slate-500">Arkib gambar dokumentasi sekolah</p>
                                 </div>
                             </div>
                             <i class="fa-solid fa-folder-open text-slate-400 text-xs"></i>
@@ -271,9 +306,9 @@
 
     <script>
         // ==========================================
-        // 1. TETAPAN PIN KESELAMATAN (Boleh Ditukar)
+        // 1. TETAPAN PIN KESELAMATAN
         // ==========================================
-        const PIN_GURU = "2054";    // PIN Guru 
+        const PIN_GURU = "2054";    // PIN Guru Koko
         const PIN_ADMIN = "8888";   // PIN PK Kokurikulum / Admin
 
         let targetRole = "";
