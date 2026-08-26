@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>HUB KOKURIKULUM DIGITAL</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#064e3b">
+    <!-- Tailwind CSS & FontAwesome CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .nav-btn.active {
+            color: #047857;
+            border-bottom: 3px solid #047857;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen text-slate-800 flex flex-col items-center">
+
+    <!-- Butang Install PWA (Automatik keluar di peranti yang menyokong) -->
+    <div id="installBanner" class="hidden w-full max-w-lg bg-emerald-700 text-white p-3 px-4 flex justify-between items-center shadow-lg">
+        <div class="flex items-center space-x-2 text-xs font-semibold">
+            <i class="fa-solid fa-mobile-screen-button text-base"></i>
+            <span>Pasang Hub Koko pada telefon anda</span>
+        </div>
+        <button id="btnInstall" class="bg-white text-emerald-800 px-3 py-1 rounded-lg text-xs font-bold hover:bg-emerald-50 shadow">
+            Install App
+        </button>
+    </div>
+
+    <!-- Kontena Utama Portal -->
+    <div class="w-full max-w-lg bg-white min-h-screen shadow-lg flex flex-col">
+        
+        <!-- Header Banner Rasmi Unit Kokurikulum -->
+        <header class="bg-gradient-to-r from-emerald-900 via-teal-800 to-emerald-900 text-white p-6 text-center rounded-b-3xl shadow-md">
+            <div class="w-16 h-16 bg-white rounded-full mx-auto mb-2 flex items-center justify-center shadow-inner border-2 border-emerald-300">
+                <i class="fa-solid fa-trophy text-3xl text-emerald-800"></i>
+            </div>
+            <h1 class="text-lg font-extrabold uppercase tracking-wide">PORTAL KOKURIKULUM</h1>
+            <p class="text-xs text-emerald-200 mt-0.5">Pusat Pengurusan & Maklumat Kokurikulum Sekolah</p>
+        </header>
+
+        <!-- Menu Navigasi Tab Bertatal (Scrollable Navigation) -->
+        <nav class="flex border-b border-slate-200 bg-slate-50 text-xs font-medium overflow-x-auto whitespace-nowrap scrollbar-none px-2">
+            <button onclick="switchTab('utama')" id="tab-utama" class="nav-btn active px-4 py-3 text-center">
+                <i class="fa-solid fa-house block text-sm mb-0.5"></i> Utama
+            </button>
+            <button onclick="switchTab('penglibatan')" id="tab-penglibatan" class="nav-btn px-4 py-3 text-center">
+                <i class="fa-solid fa-award block text-sm mb-0.5"></i> Penglibatan Murid
+            </button>
+            <button onclick="switchTab('datakoko')" id="tab-datakoko" class="nav-btn px-4 py-3 text-center">
+                <i class="fa-solid fa-users-rectangle block text-sm mb-0.5"></i> Data Kokurikulum
+            </button>
+            <button onclick="switchTab('pajsk')" id="tab-pajsk" class="nav-btn px-4 py-3 text-center">
+                <i class="fa-solid fa-chart-simple block text-sm mb-0.5"></i> Data PAJSK
+            </button>
+            <button onclick="switchTab('opr')" id="tab-opr" class="nav-btn px-4 py-3 text-center">
+                <i class="fa-solid fa-file-lines block text-sm mb-0.5"></i> OPR (Laporan)
+            </button>
+            <button onclick="requestAccess('guru')" id="tab-guru" class="nav-btn px-4 py-3 text-center text-amber-700">
+                <i class="fa-solid fa-lock block text-sm mb-0.5"></i> Guru Koko
+            </button>
+            <button onclick="requestAccess('admin')" id="tab-admin" class="nav-btn px-4 py-3 text-center text-red-700">
+                <i class="fa-solid fa-shield-halved block text-sm mb-0.5"></i> Admin / PK Koko
+            </button>
+        </nav>
+
+        <!-- Ruang Kandungan Tab -->
+        <div class="p-4 flex-1 space-y-4">
+
+            <!-- 1. TAB UTAMA -->
+            <section id="content-utama" class="space-y-4">
+                <div class="bg-emerald-50 border-l-4 border-emerald-600 p-3 rounded-lg text-xs text-emerald-900">
+                    <p class="font-bold"><i class="fa-solid fa-bullhorn mr-1"></i> Pengumuman Unit Kokurikulum</p>
+                    <p class="mt-1">Perjumpaan aktiviti kokurikulum dijalankan pada setiap hari <b>Rabu (2:00 Petang - 4:00 Petang)</b> mengikut giliran Unit Beruniform, Kelab & Persatuan, dan Sukan Permainan.</p>
+                </div>
+
+                <h2 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Akses Pantas 3 Teras Utama</h2>
+                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div class="p-3 bg-slate-50 border rounded-xl flex flex-col items-center">
+                        <i class="fa-solid fa-person-military-pointing text-2xl text-emerald-600 mb-1"></i>
+                        <span class="font-bold text-[11px]">Unit Beruniform</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 border rounded-xl flex flex-col items-center">
+                        <i class="fa-solid fa-puzzle-piece text-2xl text-blue-600 mb-1"></i>
+                        <span class="font-bold text-[11px]">Kelab & Persatuan</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 border rounded-xl flex flex-col items-center">
+                        <i class="fa-solid fa-futbol text-2xl text-amber-600 mb-1"></i>
+                        <span class="font-bold text-[11px]">1 Murid 1 Sukan</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border rounded-xl p-4 shadow-sm">
+                    <h3 class="text-xs font-bold text-slate-800 uppercase mb-2">Maklumat Penting & Pautan Rasmi</h3>
+                    <div class="space-y-2 text-xs">
+                        <a href="https://pajsk.moe.gov.my" target="_blank" class="flex justify-between items-center p-2.5 bg-slate-50 rounded-lg hover:bg-emerald-50 transition">
+                            <span class="font-semibold text-slate-700"><i class="fa-solid fa-globe text-emerald-600 mr-2"></i> Portal Rasmi PAJSK KPM</span>
+                            <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+                        </a>
+                        <a href="https://delima.moe-dl.edu.my" target="_blank" class="flex justify-between items-center p-2.5 bg-slate-50 rounded-lg hover:bg-emerald-50 transition">
+                            <span class="font-semibold text-slate-700"><i class="fa-solid fa-graduation-cap text-blue-600 mr-2"></i> DELIMa KPM</span>
+                            <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. TAB PENGLIBATAN MURID (Google Apps Script) -->
+            <section id="content-penglibatan" class="hidden space-y-4">
+                <div class="bg-blue-50 border-l-4 border-blue-600 p-3 rounded-lg text-xs text-blue-900">
+                    <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> Sistem Perekodan Penglibatan Murid</p>
+                    <p class="mt-1">Pautan aplikasi skrip untuk merekod dan menyemak rekod penyertaan murid dalam aktiviti sukan, kelab, dan unit beruniform.</p>
+                </div>
+
+                <div class="p-4 bg-slate-50 border rounded-xl text-center space-y-3">
+                    <i class="fa-solid fa-medal text-4xl text-blue-600"></i>
+                    <h3 class="font-bold text-sm text-slate-800">Sistem Penglibatan Murid</h3>
+                    <p class="text-xs text-slate-600">Klik butang di bawah untuk membuka borang/sistem semakan penglibatan murid dalam paparan penuh:</p>
+                    <a href="https://script.google.com/a/macros/moe-dl.edu.my/s/AKfycbzjLAcsk146B645GC2vFImq7Smv8utDjPdWocsyFp5UJuSrENnmIMJT3HGtzKHd_K1h/exec" target="_blank" class="inline-flex items-center space-x-2 bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow transition">
+                        <i class="fa-solid fa-up-right-from-square"></i>
+                        <span>Buka Sistem Penglibatan Murid</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 3. TAB DATA KOKURIKULUM (Google Sites Carian) -->
+            <section id="content-datakoko" class="hidden space-y-4">
+                <div class="bg-emerald-50 border-l-4 border-emerald-600 p-3 rounded-lg text-xs text-emerald-900">
+                    <p class="font-bold"><i class="fa-solid fa-address-book mr-1"></i> Carian Pendaftaran Kokurikulum</p>
+                    <p class="mt-1">Pangkalan data senarai nama murid bagi setiap unit beruniform, kelab persatuan dan sukan permainan.</p>
+                </div>
+
+                <div class="p-4 bg-slate-50 border rounded-xl text-center space-y-3">
+                    <i class="fa-solid fa-magnifying-glass-chart text-4xl text-emerald-600"></i>
+                    <h3 class="font-bold text-sm text-slate-800">Portal Carian Data Kokurikulum</h3>
+                    <p class="text-xs text-slate-600">Akses terus ke laman semakan ahli unit kokurikulum sekolah:</p>
+                    <a href="https://sites.google.com/moe-dl.edu.my/sklu8-kokurikulum/carian-koko" target="_blank" class="inline-flex items-center space-x-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow transition">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <span>Buka Portal Carian Koko</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 4. TAB DATA PAJSK -->
+            <section id="content-pajsk" class="hidden space-y-3">
+                <div class="bg-amber-50 border-l-4 border-amber-600 p-3 rounded-lg text-xs text-amber-900">
+                    <p class="font-bold"><i class="fa-solid fa-calculator mr-1"></i> Pentaksiran Aktiviti Jasmani, Sukan & Kokurikulum</p>
+                    <p class="mt-1">Panduan markah dan pengisian sistem pentaksiran PAJSK sekolah rendah (Tahun 4, 5, dan 6).</p>
+                </div>
+
+                <div class="space-y-2">
+                    <a href="https://pajsk.moe.gov.my" target="_blank" class="block p-3.5 bg-slate-50 border rounded-xl hover:border-amber-500 transition">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-server text-xl text-amber-600"></i>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800">Sistem Log Masuk PAJSK Online</p>
+                                    <p class="text-[10px] text-slate-500">Kemasukan markah oleh Guru Penasihat & Penyelaras</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-arrow-right text-slate-400 text-xs"></i>
+                        </div>
+                    </a>
+                    <div class="p-3 bg-white border rounded-xl text-xs space-y-1">
+                        <p class="font-bold text-slate-700">Komponen Markah PAJSK:</p>
+                        <p class="text-slate-600 text-[11px]">• Kehadiran: 50% | Jawatan: 10% | Penglibatan: 20% | Pencapaian: 20%</p>
+                        <p class="text-slate-600 text-[11px]">• Ekstra Kurikulum: Maksimum 10 markah bonus.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. TAB OPR (ONE PAGE REPORT) -->
+            <section id="content-opr" class="hidden space-y-3">
+                <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-lg text-xs text-teal-900">
+                    <p class="font-bold"><i class="fa-solid fa-file-circle-check mr-1"></i> Pelaporan Laporan Aktiviti (OPR)</p>
+                    <p class="mt-1">Borang dokumentasi ringkas (One Page Report) bagi setiap kali perjumpaan aktiviti mingguan kokurikulum.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <a href="https://docs.google.com/forms" target="_blank" class="block p-3.5 bg-slate-50 border rounded-xl hover:border-teal-500 transition">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-solid fa-file-pen text-xl text-teal-700"></i>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800">Hantar Laporan Mingguan (OPR)</p>
+                                    <p class="text-[10px] text-slate-500">Isi borang Google Form laporan mingguan unit anda</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-plus text-slate-400 text-xs"></i>
+                        </div>
+                    </a>
+                    <a href="https://drive.google.com" target="_blank" class="block p-3.5 bg-slate-50 border rounded-xl hover:border-teal-500 transition">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fa-brands fa-google-drive text-xl text-amber-600"></i>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800">Arkib Fail & Gambar Aktiviti (Drive)</p>
+                                    <p class="text-[10px] text-slate-500">Folder simpanan gambar dokumentasi sekolah</p>
+                                </div>
+                            </div>
+                            <i class="fa-solid fa-folder-open text-slate-400 text-xs"></i>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 6. TAB GURU KOKO (Terkunci dengan PIN) -->
+            <section id="content-guru" class="hidden space-y-3">
+                <div class="flex justify-between items-center pb-2 border-b">
+                    <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wide">Ruang Guru Kokurikulum</h2>
+                    <button onclick="lockAccess('guru')" class="text-xs text-red-600 font-semibold hover:underline">Log Keluar</button>
+                </div>
+                <div class="space-y-2">
+                    <a href="https://docs.google.com" target="_blank" class="block p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900">
+                        <i class="fa-solid fa-book-journal-whills text-emerald-700 mr-2"></i> Buku Panduan Pengurusan Kokurikulum
+                    </a>
+                    <a href="https://drive.google.com" target="_blank" class="block p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900">
+                        <i class="fa-solid fa-clipboard-list text-emerald-700 mr-2"></i> Format Minit Mesyuarat Unit Koko
+                    </a>
+                    <a href="https://docs.google.com/forms" target="_blank" class="block p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs font-bold text-emerald-900">
+                        <i class="fa-solid fa-user-check text-emerald-700 mr-2"></i> Perekodan Kehadiran Guru Bertugas
+                    </a>
+                </div>
+            </section>
+
+            <!-- 7. TAB ADMIN / PK KOKO (Terkunci dengan PIN) -->
+            <section id="content-admin" class="hidden space-y-3">
+                <div class="flex justify-between items-center pb-2 border-b">
+                    <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wide">Portal Pentadbiran Kokurikulum</h2>
+                    <button onclick="lockAccess('admin')" class="text-xs text-red-600 font-semibold hover:underline">Log Keluar</button>
+                </div>
+                <div class="space-y-2 text-xs">
+                    <a href="https://docs.google.com/spreadsheets" target="_blank" class="block p-3 bg-red-50 border border-red-200 rounded-lg font-bold text-red-900">
+                        <i class="fa-solid fa-table text-red-700 mr-2"></i> Master Sheet Data Ahli Kokurikulum
+                    </a>
+                    <a href="https://drive.google.com" target="_blank" class="block p-3 bg-red-50 border border-red-200 rounded-lg font-bold text-red-900">
+                        <i class="fa-solid fa-folder-tree text-red-700 mr-2"></i> Folder Surat Siaran & Pekeliling Koko
+                    </a>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="p-3 text-center text-[11px] text-slate-400 border-t bg-slate-50">
+            &copy; 2026 Unit Kokurikulum Sekolah Rendah.
+        </footer>
+    </div>
+
+    <!-- Modal Dialog Pengesahan PIN -->
+    <div id="pinModal" class="fixed inset-0 bg-black/60 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white w-full max-w-xs rounded-2xl p-5 shadow-2xl text-center space-y-3">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+                <h3 id="modalTitle" class="font-bold text-slate-800 text-sm">Akses Terkunci</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Sila masukkan PIN keselamatan.</p>
+            </div>
+            <input type="password" id="pinInput" maxlength="6" placeholder="••••" class="w-full text-center text-xl tracking-widest font-bold border rounded-lg py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-600">
+            <p id="pinError" class="text-[10px] text-red-500 hidden">PIN tidak tepat. Sila cuba lagi.</p>
+            <div class="flex space-x-2">
+                <button onclick="closeModal()" class="flex-1 py-1.5 text-xs font-semibold bg-slate-200 text-slate-700 rounded-lg">Batal</button>
+                <button onclick="verifyPin()" class="flex-1 py-1.5 text-xs font-semibold bg-emerald-800 text-white rounded-lg hover:bg-emerald-700">Sahkan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. TETAPAN PIN KESELAMATAN (Boleh Ditukar)
+        // ==========================================
+        const PIN_GURU = "1234";    // PIN Guru Koko
+        const PIN_ADMIN = "8888";   // PIN PK Kokurikulum / Admin
+
+        let targetRole = "";
+        let authGuru = false;
+        let authAdmin = false;
+
+        const tabs = ['utama', 'penglibatan', 'datakoko', 'pajsk', 'opr', 'guru', 'admin'];
+
+        function switchTab(tabId) {
+            tabs.forEach(t => {
+                const content = document.getElementById(`content-${t}`);
+                const tabBtn = document.getElementById(`tab-${t}`);
+                if (content) content.classList.add('hidden');
+                if (tabBtn) tabBtn.classList.remove('active');
+            });
+            const activeContent = document.getElementById(`content-${tabId}`);
+            const activeTabBtn = document.getElementById(`tab-${tabId}`);
+            if (activeContent) activeContent.classList.remove('hidden');
+            if (activeTabBtn) activeTabBtn.classList.add('active');
+        }
+
+        function requestAccess(role) {
+            targetRole = role;
+            if (role === 'guru' && authGuru) return switchTab('guru');
+            if (role === 'admin' && authAdmin) return switchTab('admin');
+
+            document.getElementById('pinInput').value = "";
+            document.getElementById('pinError').classList.add('hidden');
+            document.getElementById('modalTitle').innerText = role === 'guru' ? 'Akses Guru Kokurikulum' : 'Akses Pentadbir Kokurikulum';
+            document.getElementById('pinModal').classList.remove('hidden');
+            document.getElementById('pinInput').focus();
+        }
+
+        function closeModal() {
+            document.getElementById('pinModal').classList.add('hidden');
+        }
+
+        function verifyPin() {
+            const entered = document.getElementById('pinInput').value;
+            if (targetRole === 'guru' && entered === PIN_GURU) {
+                authGuru = true;
+                closeModal();
+                switchTab('guru');
+            } else if (targetRole === 'admin' && entered === PIN_ADMIN) {
+                authAdmin = true;
+                closeModal();
+                switchTab('admin');
+            } else {
+                document.getElementById('pinError').classList.remove('hidden');
+            }
+        }
+
+        function lockAccess(role) {
+            if (role === 'guru') authGuru = false;
+            if (role === 'admin') authAdmin = false;
+            switchTab('utama');
+        }
+
+        // ==========================================
+        // 2. FUNGSI INSTALL APP & PWA
+        // ==========================================
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+        const btnInstall = document.getElementById('btnInstall');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBanner.classList.remove('hidden');
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBanner.classList.add('hidden');
+                }
+                deferredPrompt = null;
+            }
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW failed', err));
+            });
+        }
+    </script>
+</body>
+</html>
