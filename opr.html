@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penjana OPR Kokurikulum SKLU8</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Sistem OPR Kokurikulum SKLU8</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- html2pdf.js CDN for downloading A4 PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Google Fonts Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <script>
         tailwind.config = {
             theme: {
@@ -25,11 +22,11 @@
                             600: '#0369a1',
                             700: '#0369a1',
                             800: '#075985',
-                            900: '#0c4a6e',
+                            900: '#0c4a6e'
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif']
                     }
                 }
             }
@@ -42,7 +39,6 @@
             background-color: #f1f5f9;
         }
 
-        /* Standard A4 Aspect Ratio & Sizing for Screen Preview */
         .a4-page {
             width: 210mm;
             min-height: 297mm;
@@ -54,50 +50,117 @@
             position: relative;
         }
 
-        /* Print Specific Styles to force single A4 page */
+        .document-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .document-logo-wrap {
+            width: 72px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .document-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            image-rendering: auto;
+        }
+
+        .document-title {
+            flex: 1;
+            text-align: center;
+            padding: 0 8px;
+        }
+
+        .document-school-name {
+            font-size: 15px;
+            font-weight: 900;
+            line-height: 1.2;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            color: #0f172a;
+        }
+
+        .document-opr-title {
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.2;
+            text-transform: uppercase;
+            color: #075985;
+            margin-top: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         @media print {
             body {
                 background: white !important;
                 padding: 0 !important;
                 margin: 0 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
+
             .no-print {
                 display: none !important;
             }
+
             .a4-page {
-                width: 100% !important;
-                height: 100vh !important;
+                width: 210mm !important;
+                min-height: 297mm !important;
                 margin: 0 !important;
                 padding: 10mm 12mm !important;
                 box-shadow: none !important;
-                page-break-after: avoid !important;
-                page-break-inside: avoid !important;
+                border: none !important;
             }
+
+            .document-logo-wrap {
+                width: 68px !important;
+                height: 68px !important;
+            }
+
+            .document-school-name {
+                font-size: 14px !important;
+            }
+
+            .document-opr-title {
+                font-size: 11px !important;
+            }
+
             @page {
                 size: A4 portrait;
                 margin: 0;
             }
         }
-
-        /* Custom Scrollbar for Form Sidebar */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col">
 
-    <!-- Application Navbar (Hidden on Print) -->
     <header class="no-print bg-slate-900 text-white sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -105,24 +168,27 @@
                     <i class="fa-solid fa-file-invoice text-lg"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight">Penjana OPR Kokurikulum</h1>
+                    <h1 class="font-bold text-lg leading-tight">Sistem OPR Kokurikulum</h1>
                     <p class="text-xs text-slate-400">Sekolah Kebangsaan Felda Lepar Utara 8</p>
                 </div>
             </div>
-            
+
             <div class="flex items-center space-x-2 sm:space-x-3">
                 <button onclick="fillSampleData()" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg transition flex items-center gap-1.5">
                     <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
                     <span class="hidden sm:inline">Isi Contoh</span>
                 </button>
+
                 <button onclick="resetForm()" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-red-900/50 text-slate-300 hover:text-red-300 border border-slate-700 hover:border-red-800 rounded-lg transition flex items-center gap-1.5">
                     <i class="fa-solid fa-rotate-left"></i>
                     <span class="hidden sm:inline">Reset</span>
                 </button>
+
                 <button onclick="triggerPrint()" class="px-3.5 py-1.5 text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition shadow flex items-center gap-1.5">
                     <i class="fa-solid fa-print"></i>
                     <span>Cetak</span>
                 </button>
+
                 <button onclick="downloadPDF()" id="btnDownload" class="px-4 py-1.5 text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white rounded-lg transition shadow flex items-center gap-1.5">
                     <i class="fa-solid fa-file-pdf"></i>
                     <span>Muat Turun PDF</span>
@@ -131,10 +197,7 @@
         </div>
     </header>
 
-    <!-- Main Workspace Container -->
     <div class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        <!-- Left Column: Form Editor Controls (Hidden on Print) -->
         <aside class="no-print lg:col-span-5 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex flex-col h-[calc(100vh-6rem)] sticky top-20">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <h2 class="font-bold text-slate-800 flex items-center gap-2">
@@ -144,38 +207,27 @@
                 <span class="text-xs px-2 py-0.5 bg-brand-50 text-brand-700 font-medium rounded-full border border-brand-100">Unit Kokurikulum</span>
             </div>
 
-            <!-- Form Fields Container -->
             <div class="flex-1 overflow-y-auto pr-1 space-y-5 custom-scrollbar my-4">
-                
-                <!-- Section 1: Header & Logos -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 space-y-3">
                     <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                         <i class="fa-solid fa-heading text-slate-500"></i> Header & Logo Sekolah
                     </h3>
-                    
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-600 mb-1">Logo KPM/Koku (Kiri)</label>
-                            <input type="file" id="inputLogoKpm" accept="image/*" class="text-xs w-full text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-slate-600 mb-1">Logo Sekolah (Kanan)</label>
-                            <input type="file" id="inputLogoSekolah" accept="image/*" class="text-xs w-full text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
-                        </div>
+
+                    <div class="bg-white border border-slate-200 rounded-lg p-3 text-[11px] text-slate-600">
+                        Logo KPM dan logo sekolah dipaparkan secara automatik. Tidak perlu dimuat naik setiap kali mengisi OPR.
                     </div>
 
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Nama Sekolah / Unit</label>
                         <input type="text" id="inputNamaSekolah" value="SEKOLAH KEBANGSAAN FELDA LEPAR UTARA 8" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
                     </div>
-                    
+
                     <div>
                         <label class="block text-xs font-medium text-slate-600 mb-1">Tajuk Header OPR</label>
                         <input type="text" id="inputTajukHeader" value="ONE PAGE REPORT (OPR) KOKURIKULUM" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none font-semibold">
                     </div>
                 </div>
 
-                <!-- Section 2: Butiran Program -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 space-y-3">
                     <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                         <i class="fa-solid fa-list-check text-slate-500"></i> Butiran Program / Aktiviti
@@ -214,7 +266,6 @@
                     </div>
                 </div>
 
-                <!-- Section 3: 4 Gambar Aktiviti Uploads -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 space-y-3">
                     <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
                         <span class="flex items-center gap-1.5">
@@ -224,25 +275,24 @@
                     </h3>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <!-- Gambar 1 -->
                         <div class="p-2 bg-white rounded-lg border border-slate-200 space-y-1.5">
                             <label class="block text-xs font-semibold text-slate-700">Gambar 1</label>
                             <input type="file" id="inputGambar1" accept="image/*" class="text-xs w-full text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-slate-100 hover:file:bg-slate-200 cursor-pointer">
                             <input type="text" id="inputKapsyen1" placeholder="Kapsyen Gambar 1..." class="w-full text-[11px] p-1.5 border border-slate-200 rounded focus:outline-none">
                         </div>
-                        <!-- Gambar 2 -->
+
                         <div class="p-2 bg-white rounded-lg border border-slate-200 space-y-1.5">
                             <label class="block text-xs font-semibold text-slate-700">Gambar 2</label>
                             <input type="file" id="inputGambar2" accept="image/*" class="text-xs w-full text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-slate-100 hover:file:bg-slate-200 cursor-pointer">
                             <input type="text" id="inputKapsyen2" placeholder="Kapsyen Gambar 2..." class="w-full text-[11px] p-1.5 border border-slate-200 rounded focus:outline-none">
                         </div>
-                        <!-- Gambar 3 -->
+
                         <div class="p-2 bg-white rounded-lg border border-slate-200 space-y-1.5">
                             <label class="block text-xs font-semibold text-slate-700">Gambar 3</label>
                             <input type="file" id="inputGambar3" accept="image/*" class="text-xs w-full text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-slate-100 hover:file:bg-slate-200 cursor-pointer">
                             <input type="text" id="inputKapsyen3" placeholder="Kapsyen Gambar 3..." class="w-full text-[11px] p-1.5 border border-slate-200 rounded focus:outline-none">
                         </div>
-                        <!-- Gambar 4 -->
+
                         <div class="p-2 bg-white rounded-lg border border-slate-200 space-y-1.5">
                             <label class="block text-xs font-semibold text-slate-700">Gambar 4</label>
                             <input type="file" id="inputGambar4" accept="image/*" class="text-xs w-full text-slate-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:bg-slate-100 hover:file:bg-slate-200 cursor-pointer">
@@ -251,7 +301,6 @@
                     </div>
                 </div>
 
-                <!-- Section 4: Pengesahan & Tandatangan -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200/80 space-y-3">
                     <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                         <i class="fa-solid fa-signature text-slate-500"></i> Pengesahan Laporan
@@ -263,6 +312,7 @@
                             <input type="text" id="inputPenyedia" placeholder="Nama Guru / Setiausaha" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
                             <input type="text" id="inputJawatanPenyedia" placeholder="Jawatan / Unit" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none mt-1.5">
                         </div>
+
                         <div>
                             <label class="block text-xs font-medium text-slate-600 mb-1">Nama Pengesah (Disahkan)</label>
                             <input type="text" id="inputPengesah" placeholder="Nama GPK Kokurikulum / GB" class="w-full text-xs p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:outline-none">
@@ -270,41 +320,35 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-            
+
             <div class="pt-3 border-t border-slate-100 text-center">
                 <p class="text-[11px] text-slate-400">Templat OPR Mesra GitHub Pages & Embed - SK FELDA LEPAR UTARA 8</p>
             </div>
         </aside>
 
-        <!-- Right Column: Live A4 Preview Sheet -->
         <main class="lg:col-span-7 flex justify-center items-start overflow-x-auto p-2">
-            
-            <!-- Printable A4 Document Container -->
             <div id="oprReportPaper" class="a4-page flex flex-col justify-between text-slate-900 border border-slate-200">
-                
                 <div>
-                    <!-- Document Header with Logos -->
-                    <div class="flex items-center justify-between border-b-2 border-slate-800 pb-3 mb-3">
-                        <!-- Left Logo (Logo KPM) -->
-                        <div class="w-16 h-16 flex items-center justify-center overflow-hidden">
-                            <img id="previewLogoKpm" src="" alt="Logo KPM" class="max-h-full max-w-full object-contain">
+                    <div class="document-header">
+                        <div class="document-logo-wrap">
+                            <img id="previewLogoKpm" src="" alt="Logo KPM" class="document-logo">
                         </div>
 
-                        <!-- Center Header Titles -->
-                        <div class="text-center flex-1 px-3">
-                            <h2 id="viewNamaSekolah" class="text-sm font-black tracking-wide uppercase text-slate-900 leading-snug">SEKOLAH KEBANGSAAN FELDA LEPAR UTARA 8</h2>
-                            <h1 id="viewTajukHeader" class="text-xs font-extrabold uppercase text-brand-800 tracking-normal mt-0.5">ONE PAGE REPORT (OPR) KOKURIKULUM</h1>
+                        <div class="document-title">
+                            <h2 id="viewNamaSekolah" class="document-school-name">
+                                SEKOLAH KEBANGSAAN FELDA LEPAR UTARA 8
+                            </h2>
+                            <h1 id="viewTajukHeader" class="document-opr-title">
+                                ONE PAGE REPORT (OPR) KOKURIKULUM
+                            </h1>
                         </div>
 
-                        <!-- Right Logo (Logo Sekolah) -->
-                        <div class="w-16 h-16 flex items-center justify-center overflow-hidden">
-                            <img id="previewLogoSekolah" src="" alt="Logo Sekolah" class="max-h-full max-w-full object-contain">
+                        <div class="document-logo-wrap">
+                            <img id="previewLogoSekolah" src="" alt="Logo Sekolah" class="document-logo">
                         </div>
                     </div>
 
-                    <!-- Program Details Table Section -->
                     <div class="mb-3 text-[11px]">
                         <table class="w-full border-collapse border border-slate-400">
                             <tbody>
@@ -332,7 +376,6 @@
                         </table>
                     </div>
 
-                    <!-- 4 Photo Grid Section (2x2 Matrix) -->
                     <div class="mb-3">
                         <div class="bg-slate-800 text-white text-[11px] font-bold py-1 px-2 mb-2 flex items-center justify-between rounded-sm">
                             <span>DOKUMENTASI BERGAMBAR (4 GAMBAR UTAMA)</span>
@@ -340,7 +383,6 @@
                         </div>
 
                         <div class="grid grid-cols-2 gap-2.5">
-                            <!-- Slot Gambar 1 -->
                             <div class="border border-slate-300 rounded p-1 bg-slate-50 flex flex-col items-center">
                                 <div class="w-full h-36 bg-slate-200 rounded flex items-center justify-center overflow-hidden border border-slate-200">
                                     <img id="viewGambar1" src="" alt="Gambar 1" class="w-full h-full object-cover">
@@ -348,7 +390,6 @@
                                 <p id="viewKapsyen1" class="text-[10px] font-medium text-center text-slate-700 mt-1 italic leading-snug">Gambar 1</p>
                             </div>
 
-                            <!-- Slot Gambar 2 -->
                             <div class="border border-slate-300 rounded p-1 bg-slate-50 flex flex-col items-center">
                                 <div class="w-full h-36 bg-slate-200 rounded flex items-center justify-center overflow-hidden border border-slate-200">
                                     <img id="viewGambar2" src="" alt="Gambar 2" class="w-full h-full object-cover">
@@ -356,7 +397,6 @@
                                 <p id="viewKapsyen2" class="text-[10px] font-medium text-center text-slate-700 mt-1 italic leading-snug">Gambar 2</p>
                             </div>
 
-                            <!-- Slot Gambar 3 -->
                             <div class="border border-slate-300 rounded p-1 bg-slate-50 flex flex-col items-center">
                                 <div class="w-full h-36 bg-slate-200 rounded flex items-center justify-center overflow-hidden border border-slate-200">
                                     <img id="viewGambar3" src="" alt="Gambar 3" class="w-full h-full object-cover">
@@ -364,7 +404,6 @@
                                 <p id="viewKapsyen3" class="text-[10px] font-medium text-center text-slate-700 mt-1 italic leading-snug">Gambar 3</p>
                             </div>
 
-                            <!-- Slot Gambar 4 -->
                             <div class="border border-slate-300 rounded p-1 bg-slate-50 flex flex-col items-center">
                                 <div class="w-full h-36 bg-slate-200 rounded flex items-center justify-center overflow-hidden border border-slate-200">
                                     <img id="viewGambar4" src="" alt="Gambar 4" class="w-full h-full object-cover">
@@ -373,10 +412,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- Footer Signatures Section -->
                 <div class="pt-2 border-t border-slate-300 text-[10px] grid grid-cols-2 gap-8">
                     <div>
                         <p class="font-bold text-slate-700">Disediakan Oleh:</p>
@@ -392,20 +429,16 @@
                         <p id="viewJawatanPengesah" class="text-slate-600">Penolong Kanan Kokurikulum SK FLU8</p>
                     </div>
                 </div>
-
             </div>
         </main>
     </div>
 
-    <!-- Notification Toast Modal -->
     <div id="toast" class="no-print fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 text-xs transition-opacity duration-300 opacity-0 pointer-events-none z-50">
         <i class="fa-solid fa-circle-check text-emerald-400"></i>
         <span id="toastMsg">Mesej Notifikasi</span>
     </div>
 
-    <!-- JavaScript Logic Section -->
     <script>
-        // SVG Placeholder Generator for Images
         function createSvgPlaceholder(text, width = 200, height = 200, bgColor = '#e2e8f0', textColor = '#64748b') {
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
                 <rect width="100%" height="100%" fill="${bgColor}"/>
@@ -414,72 +447,10 @@
             return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
         }
 
-        // Default Official Vector Logos for SK FLU8
-        const defaultLogoKpm = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="120" height="120">
-          <g transform="translate(0, 10)">
-            <path d="M150,15 a20,20 0 1,0 0,32 a23,23 0 1,1 0,-32" fill="#FFD700"/>
-            <polygon points="150,22 153,29 160,27 155,33 161,38 153,38 150,45 147,38 139,38 145,33 140,27 147,29" fill="#FFD700"/>
-            <path d="M110,65 L190,65 L190,125 C190,165 150,185 150,185 C150,185 110,165 110,125 Z" fill="#ffffff" stroke="#000000" stroke-width="3"/>
-            <rect x="110" y="65" width="80" height="30" fill="#DA291C"/>
-            <path d="M120,70 v20 M135,70 v20 M150,70 v20 M165,70 v20 M180,70 v20" stroke="#FFD700" stroke-width="2.5"/>
-            <rect x="110" y="95" width="20" height="35" fill="#DA291C"/>
-            <rect x="130" y="95" width="20" height="35" fill="#000000"/>
-            <rect x="150" y="95" width="20" height="35" fill="#FFFFFF" stroke="#ccc" stroke-width="0.5"/>
-            <rect x="170" y="95" width="20" height="35" fill="#FFD700"/>
-            <path d="M110,130 L190,130 L190,125 C190,165 150,185 150,185 C150,185 110,165 110,125 Z" fill="#FFFFFF"/>
-            <circle cx="130" cy="148" r="8" fill="#007A33"/>
-            <path d="M150,143 C145,148 155,152 150,157" stroke="#DA291C" stroke-width="3" fill="none"/>
-            <circle cx="150" cy="150" r="4" fill="#DA291C"/>
-            <circle cx="170" cy="148" r="8" fill="#007A33"/>
-            <path d="M70,110 C80,90 100,80 110,80 L110,110 C100,120 90,140 80,160 C75,150 70,130 70,110 Z" fill="#E06D10"/>
-            <path d="M70,110 C80,90 100,80 110,80" stroke="#000" stroke-width="2" fill="none"/>
-            <path d="M230,110 C220,90 200,80 190,80 L190,110 C200,120 210,140 220,160 C225,150 230,130 230,110 Z" fill="#E06D10"/>
-            <path d="M60,170 Q150,205 240,170 L245,185 Q150,220 55,185 Z" fill="#FFD700" stroke="#000" stroke-width="1.5"/>
-            <text x="150" y="188" font-family="sans-serif" font-size="10" font-weight="bold" text-anchor="middle" fill="#000000">BERSEKUTU BERTAMBAH MUTU</text>
-          </g>
-        </svg>`);
-
-        const defaultLogoSekolah = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 350" width="120" height="140">
-          <path d="M50,45 C70,15 80,15 100,45 C120,15 130,15 150,45 C170,15 180,15 200,45 C220,15 230,15 250,45 L250,55 L50,55 Z" fill="#008000" stroke="#000" stroke-width="2"/>
-          <rect x="40" y="55" width="220" height="28" fill="#ffffff" stroke="#000000" stroke-width="2"/>
-          <text x="150" y="74" font-family="Arial, sans-serif" font-size="12" font-weight="bold" text-anchor="middle" fill="#000">BERILMU BERUSAHA BERJAYA</text>
-          <path d="M25,65 C25,230 60,310 150,335 C240,310 275,230 275,65 Z" fill="#ffffff" stroke="#000000" stroke-width="3"/>
-          <path d="M40,75 C40,220 70,295 150,320 C230,295 260,220 260,75 Z" fill="none" stroke="#000000" stroke-width="1.5"/>
-          <path id="textPath" d="M 42,120 C 42,325 258,325 258,120" fill="none"/>
-          <text font-family="Arial, sans-serif" font-size="10.5" font-weight="bold" fill="#000">
-            <textPath href="#textPath" startOffset="50%" text-anchor="middle">
-              SEKOLAH KEBANGSAAN (LKTP) LEPAR UTARA LAPAN (8)
-            </textPath>
-          </text>
-          <line x1="150" y1="90" x2="150" y2="80" stroke="#000" stroke-width="2"/>
-          <line x1="125" y1="100" x2="115" y2="92" stroke="#000" stroke-width="2"/>
-          <line x1="175" y1="100" x2="185" y2="92" stroke="#000" stroke-width="2"/>
-          <line x1="110" y1="120" x2="100" y2="120" stroke="#000" stroke-width="2"/>
-          <line x1="190" y1="120" x2="200" y2="120" stroke="#000" stroke-width="2"/>
-          <path d="M150,92 C140,110 145,125 150,135 C155,125 160,110 150,92 Z" fill="#000000"/>
-          <rect x="146" y="135" width="8" height="65" fill="#000000"/>
-          <path d="M75,145 Q115,135 148,150 L148,185 Q115,170 75,182 Z" fill="#FFEB3B" stroke="#000" stroke-width="2"/>
-          <path d="M225,145 Q185,135 152,150 L152,185 Q185,170 225,182 Z" fill="#FFEB3B" stroke="#000" stroke-width="2"/>
-          <path d="M85,152 Q115,144 145,156 M85,160 Q115,152 145,164 M85,168 Q115,160 145,172" stroke="#000" stroke-width="1" fill="none"/>
-          <path d="M215,152 Q185,144 155,156 M215,160 Q185,152 155,164 M215,168 Q185,160 155,172" stroke="#000" stroke-width="1" fill="none"/>
-          <text x="150" y="208" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#000">1987</text>
-          <circle cx="75" cy="225" r="5" fill="#000"/>
-          <path d="M75,230 L75,250 M70,235 L80,235 M70,250 L75,245 L80,255" stroke="#000" stroke-width="2.5" fill="none"/>
-          <line x1="82" y1="215" x2="82" y2="265" stroke="#000" stroke-width="2.5"/>
-          <circle cx="105" cy="255" r="5" fill="#000"/>
-          <path d="M105,260 L112,275 M98,265 L110,260 L120,268 M100,285 L112,275 L125,270" stroke="#000" stroke-width="2.5" fill="none"/>
-          <circle cx="150" cy="270" r="5" fill="#000"/>
-          <path d="M150,275 L150,300 M150,280 L160,273 M150,280 L142,290 M144,300 L150,300 L156,300" stroke="#000" stroke-width="2.5" fill="none"/>
-          <circle cx="185" cy="260" r="5" fill="#000"/>
-          <path d="M185,265 L178,280 M172,272 L185,265 L195,270 M190,285 L178,280 L168,285" stroke="#000" stroke-width="2.5" fill="none"/>
-          <circle cx="220" cy="228" r="5" fill="#000"/>
-          <path d="M220,233 L220,252 M220,238 L232,235 M210,258 L220,252 L225,262" stroke="#000" stroke-width="2.5" fill="none"/>
-          <rect x="232" y="228" width="12" height="12" fill="none" stroke="#000" stroke-width="2"/>
-        </svg>`);
-
+        const defaultLogoKpm = 'logo-kpm.png';
+        const defaultLogoSekolah = 'logo.jpg';
         const defaultPhotoPlaceholder = (num) => createSvgPlaceholder(`GAMBAR ${num}`, 400, 300, '#f1f5f9', '#94a3b8');
 
-        // Initial Data Structure
         const defaultData = {
             namaSekolah: 'SEKOLAH KEBANGSAAN FELDA LEPAR UTARA 8',
             tajukHeader: 'ONE PAGE REPORT (OPR) KOKURIKULUM',
@@ -499,7 +470,6 @@
             jawatanPengesah: 'PK Kokurikulum SK FLU8'
         };
 
-        // State Store
         let imageStore = {
             logoSekolah: defaultLogoSekolah,
             logoKpm: defaultLogoKpm,
@@ -509,7 +479,6 @@
             gambar4: defaultPhotoPlaceholder(4)
         };
 
-        // DOM Element Mapping Function
         function bindInputToView(inputId, viewId) {
             const inputEl = document.getElementById(inputId);
             const viewEl = document.getElementById(viewId);
@@ -522,7 +491,6 @@
             });
         }
 
-        // Image Input Handler
         function handleImageUpload(inputId, storeKey, previewId) {
             const inputEl = document.getElementById(inputId);
             const previewEl = document.getElementById(previewId);
@@ -543,33 +511,31 @@
             });
         }
 
-        // Toast Notification System
         function showToast(message) {
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toastMsg');
             toastMsg.innerText = message;
             toast.classList.remove('opacity-0', 'pointer-events-none');
             toast.classList.add('opacity-100');
+
             setTimeout(() => {
                 toast.classList.remove('opacity-100');
                 toast.classList.add('opacity-0', 'pointer-events-none');
             }, 3000);
         }
 
-        // Fill Sample Data Function
         function fillSampleData() {
             Object.keys(defaultData).forEach(key => {
                 const inputId = 'input' + key.charAt(0).toUpperCase() + key.slice(1);
                 const viewId = 'view' + key.charAt(0).toUpperCase() + key.slice(1);
-                
+
                 const inputEl = document.getElementById(inputId);
                 const viewEl = document.getElementById(viewId);
-                
+
                 if (inputEl) inputEl.value = defaultData[key];
                 if (viewEl) viewEl.innerText = defaultData[key];
             });
 
-            // Default Placeholders for Images if empty
             imageStore.logoSekolah = defaultLogoSekolah;
             imageStore.logoKpm = defaultLogoKpm;
             imageStore.gambar1 = defaultPhotoPlaceholder(1);
@@ -588,7 +554,6 @@
             showToast('Contoh data SK FLU8 diisi!');
         }
 
-        // Reset Form
         function resetForm() {
             const inputs = document.querySelectorAll('aside input[type="text"], aside textarea');
             inputs.forEach(input => input.value = '');
@@ -596,13 +561,11 @@
             const viewElements = document.querySelectorAll('[id^="view"]');
             viewElements.forEach(el => el.innerText = '-');
 
-            // Reset Default Header Text
             document.getElementById('inputNamaSekolah').value = 'SEKOLAH KEBANGSAAN FELDA LEPAR UTARA 8';
             document.getElementById('viewNamaSekolah').innerText = 'SEKOLAH KEBANGSAAN FELDA LEPAR UTARA 8';
             document.getElementById('inputTajukHeader').value = 'ONE PAGE REPORT (OPR) KOKURIKULUM';
             document.getElementById('viewTajukHeader').innerText = 'ONE PAGE REPORT (OPR) KOKURIKULUM';
 
-            // Reset Images
             imageStore = {
                 logoSekolah: defaultLogoSekolah,
                 logoKpm: defaultLogoKpm,
@@ -623,10 +586,10 @@
             showToast('Borang telah dibersihkan.');
         }
 
-        // Save State to LocalStorage
         function saveStateToLocalStorage() {
             const formData = {};
             const keys = Object.keys(defaultData);
+
             keys.forEach(key => {
                 const inputId = 'input' + key.charAt(0).toUpperCase() + key.slice(1);
                 const inputEl = document.getElementById(inputId);
@@ -635,7 +598,11 @@
 
             const state = {
                 formData,
-                imageStore
+                imageStore: {
+                    ...imageStore,
+                    logoSekolah: defaultLogoSekolah,
+                    logoKpm: defaultLogoKpm
+                }
             };
 
             try {
@@ -645,9 +612,9 @@
             }
         }
 
-        // Load State from LocalStorage
         function loadStateFromLocalStorage() {
             const saved = localStorage.getItem('opr_skflu8_data');
+
             if (!saved) {
                 fillSampleData();
                 return;
@@ -655,6 +622,7 @@
 
             try {
                 const state = JSON.parse(saved);
+
                 if (state.formData) {
                     Object.keys(state.formData).forEach(key => {
                         const inputId = 'input' + key.charAt(0).toUpperCase() + key.slice(1);
@@ -667,28 +635,30 @@
                     });
                 }
 
-                if (state.imageStore) {
-                    // Update default logos if placeholder was cached previously
-                    if (!state.imageStore.logoKpm || state.imageStore.logoKpm.includes('LOGO%20KPM')) {
-                        state.imageStore.logoKpm = defaultLogoKpm;
-                    }
-                    if (!state.imageStore.logoSekolah || state.imageStore.logoSekolah.includes('LOGO%20SK%20FLU8')) {
-                        state.imageStore.logoSekolah = defaultLogoSekolah;
-                    }
-                    imageStore = { ...imageStore, ...state.imageStore };
-                    document.getElementById('previewLogoSekolah').src = imageStore.logoSekolah;
-                    document.getElementById('previewLogoKpm').src = imageStore.logoKpm;
-                    document.getElementById('viewGambar1').src = imageStore.gambar1;
-                    document.getElementById('viewGambar2').src = imageStore.gambar2;
-                    document.getElementById('viewGambar3').src = imageStore.gambar3;
-                    document.getElementById('viewGambar4').src = imageStore.gambar4;
-                }
+                imageStore = {
+                    logoSekolah: defaultLogoSekolah,
+                    logoKpm: defaultLogoKpm,
+                    gambar1: defaultPhotoPlaceholder(1),
+                    gambar2: defaultPhotoPlaceholder(2),
+                    gambar3: defaultPhotoPlaceholder(3),
+                    gambar4: defaultPhotoPlaceholder(4),
+                    ...(state.imageStore || {})
+                };
+
+                imageStore.logoSekolah = defaultLogoSekolah;
+                imageStore.logoKpm = defaultLogoKpm;
+
+                document.getElementById('previewLogoSekolah').src = imageStore.logoSekolah;
+                document.getElementById('previewLogoKpm').src = imageStore.logoKpm;
+                document.getElementById('viewGambar1').src = imageStore.gambar1;
+                document.getElementById('viewGambar2').src = imageStore.gambar2;
+                document.getElementById('viewGambar3').src = imageStore.gambar3;
+                document.getElementById('viewGambar4').src = imageStore.gambar4;
             } catch (e) {
                 fillSampleData();
             }
         }
 
-        // Download PDF Function using html2pdf.js
         function downloadPDF() {
             const element = document.getElementById('oprReportPaper');
             const programTitle = document.getElementById('inputNamaProgram').value || 'OPR_Kokurikulum_SKFLU8';
@@ -711,37 +681,29 @@
                 btnDownload.innerHTML = originalText;
                 btnDownload.disabled = false;
                 showToast('Fail PDF berjaya dimuat turun!');
-            }).catch(err => {
-                console.error(err);
+            }).catch(() => {
                 btnDownload.innerHTML = originalText;
                 btnDownload.disabled = false;
                 showToast('Ralat semasa penjanaan PDF.');
             });
         }
 
-        // Native Print Trigger
         function triggerPrint() {
             window.print();
         }
 
-        // Initialisation on Load
         window.addEventListener('DOMContentLoaded', () => {
-            // Bind text inputs
             Object.keys(defaultData).forEach(key => {
                 const inputId = 'input' + key.charAt(0).toUpperCase() + key.slice(1);
                 const viewId = 'view' + key.charAt(0).toUpperCase() + key.slice(1);
                 bindInputToView(inputId, viewId);
             });
 
-            // Bind image upload inputs
-            handleImageUpload('inputLogoSekolah', 'logoSekolah', 'previewLogoSekolah');
-            handleImageUpload('inputLogoKpm', 'logoKpm', 'previewLogoKpm');
             handleImageUpload('inputGambar1', 'gambar1', 'viewGambar1');
             handleImageUpload('inputGambar2', 'gambar2', 'viewGambar2');
             handleImageUpload('inputGambar3', 'gambar3', 'viewGambar3');
             handleImageUpload('inputGambar4', 'gambar4', 'viewGambar4');
 
-            // Load saved state or default
             loadStateFromLocalStorage();
         });
     </script>
