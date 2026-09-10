@@ -377,7 +377,36 @@
             </div>
         </div>
     </div>
+<!-- Modal Panduan Install App -->
+<div id="installGuideModal" class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/70 backdrop-blur-sm p-4">
+    <div class="w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl">
 
+        <div class="flex justify-center pt-7">
+            <div id="installGuideIcon" class="flex h-20 w-20 items-center justify-center rounded-3xl bg-blue-100 text-4xl text-blue-700">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+        </div>
+
+        <div class="px-6 pt-5 pb-6 text-center">
+            <h2 id="installGuideTitle" class="text-2xl font-black text-slate-800">
+                Pasang Hub Koko
+            </h2>
+
+            <p id="installGuideIntro" class="mt-2 text-sm leading-relaxed text-slate-500">
+                Ikuti panduan di bawah untuk memasang aplikasi.
+            </p>
+
+            <div id="installGuideSteps" class="mt-5 space-y-3 text-left"></div>
+
+            <button
+                id="btnCloseInstallGuide"
+                type="button"
+                class="mt-6 w-full rounded-2xl bg-blue-700 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-blue-800 active:scale-[0.98]">
+                Faham
+            </button>
+        </div>
+    </div>
+</div>
     <script>
         // ==========================================
         // 1. TETAPAN PIN KESELAMATAN
@@ -442,42 +471,349 @@
         }
 
                // ==========================================
-        // 2. FUNGSI INSTALL APP & PWA
+                // ==========================================
+        // 2. FUNGSI FLOATING INSTALL APP & PWA
         // ==========================================
-        let deferredPrompt;
-        const installBanner = document.getElementById('installBanner');
+        let deferredPrompt = null;
+
         const btnInstall = document.getElementById('btnInstall');
 
-        // Buka paparan banner terus supaya butang tidak hilang
-        if (installBanner) {
-            installBanner.classList.remove('hidden');
+        // Modal panduan install
+        const installGuideModal = document.getElementById('installGuideModal');
+        const installGuideIcon = document.getElementById('installGuideIcon');
+        const installGuideTitle = document.getElementById('installGuideTitle');
+        const installGuideIntro = document.getElementById('installGuideIntro');
+        const installGuideSteps = document.getElementById('installGuideSteps');
+        const btnCloseInstallGuide = document.getElementById('btnCloseInstallGuide');
+
+        function getDeviceInfo() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+
+            const isIPadOS =
+                navigator.platform === 'MacIntel' &&
+                navigator.maxTouchPoints > 1;
+
+            const isIOS = /iPad|iPhone|iPod/i.test(ua) || isIPadOS;
+            const isAndroid = /Android/i.test(ua);
+            const isWindows = /Windows/i.test(ua);
+
+            const isSafari =
+                /^((?!chrome|android|crios|fxios|edgios).)*safari/i.test(ua);
+
+            const isChromeIOS = /CriOS/i.test(ua);
+            const isEdgeIOS = /EdgiOS/i.test(ua);
+            const isSamsungInternet = /SamsungBrowser/i.test(ua);
+
+            return {
+                isIOS,
+                isAndroid,
+                isWindows,
+                isSafari,
+                isChromeIOS,
+                isEdgeIOS,
+                isSamsungInternet
+            };
         }
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
+        function isRunningAsInstalledApp() {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                window.navigator.standalone === true;
+        }
+
+        function createInstallStep(number, text) {
+            return `
+                <div class="flex items-start gap-3 rounded-2xl bg-slate-50 p-3.5">
+                    <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-700 text-xs font-black text-white">
+                        ${number}
+                    </div>
+                    <p class="pt-0.5 text-sm leading-relaxed text-slate-700">
+                        ${text}
+                    </p>
+                </div>
+            `;
+        }
+
+        function showInstallGuide() {
+            const device = getDeviceInfo();
+
+            if (!installGuideModal) {
+                alert('Sila tambah kod modal Install Guide terlebih dahulu.');
+                return;
+            }
+
+            installGuideSteps.innerHTML = '';
+
+            if (isRunningAsInstalledApp()) {
+                installGuideIcon.innerHTML =
+                    '<i class="fa-solid fa-circle-check"></i>';
+
+                installGuideIcon.className =
+                    'flex h-20 w-20 items-center justify-center rounded-3xl bg-emerald-100 text-4xl text-emerald-700';
+
+                installGuideTitle.innerText =
+                    'Aplikasi Sudah Dipasang';
+
+                installGuideIntro.innerText =
+                    'Hub Koko ini sudah dibuka sebagai aplikasi pada peranti anda.';
+
+                installGuideSteps.innerHTML = createInstallStep(
+                    '✓',
+                    'Cari ikon <b>Hub Koko</b> pada skrin utama atau senarai aplikasi untuk membukanya pada bila-bila masa.'
+                );
+
+                btnCloseInstallGuide.innerText = 'Tutup';
+            }
+
+            // iPhone/iPad dalam Safari
+            else if (device.isIOS && device.isSafari) {
+                installGuideIcon.innerHTML =
+                    '<i class="fa-brands fa-apple"></i>';
+
+                installGuideIcon.className =
+                    'flex h-20 w-20 items-center justify-center rounded-3xl bg-blue-100 text-4xl text-blue-700';
+
+                installGuideTitle.innerText =
+                    'Pasang pada iPhone/iPad';
+
+                installGuideIntro.innerText =
+                    'Ikuti tiga langkah ini untuk tambah Hub Koko pada skrin utama.';
+
+                installGuideSteps.innerHTML =
+                    createInstallStep(
+                        '1',
+                        'Tekan ikon <b>Share</b> <i class="fa-solid fa-arrow-up-from-bracket text-blue-700"></i> pada Safari.'
+                    ) +
+                    createInstallStep(
+                        '2',
+                        'Skrol ke bawah dan pilih <b>Add to Home Screen</b>.'
+                    ) +
+                    createInstallStep(
+                        '3',
+                        'Tekan <b>Add</b>. Ikon Hub Koko akan muncul pada skrin utama.'
+                    );
+
+                btnCloseInstallGuide.innerText = 'Faham';
+            }
+
+            // iPhone/iPad dalam Chrome atau Edge
+            else if (device.isIOS && (device.isChromeIOS || device.isEdgeIOS)) {
+                installGuideIcon.innerHTML =
+                    '<i class="fa-brands fa-apple"></i>';
+
+                installGuideIcon.className =
+                    'flex h-20 w-20 items-center justify-center rounded-3xl bg-amber-100 text-4xl text-amber-700';
+
+                installGuideTitle.innerText =
+                    'Buka Dengan Safari';
+
+                installGuideIntro.innerText =
+                    'Untuk pasang Hub Koko pada iPhone/iPad, gunakan Safari.';
+
+                installGuideSteps.innerHTML =
+                    createInstallStep(
+                        '1',
+                        'Salin alamat portal Hub Koko ini.'
+                    ) +
+                    createInstallStep(
+                        '2',
+                        'Buka aplikasi <b>Safari</b> dan tampal alamat portal.'
+                    ) +
+                    createInstallStep(
+                        '3',
+                        'Tekan Share <i class="fa-solid fa-arrow-up-from-bracket text-blue-700"></i> → <b>Add to Home Screen</b> → <b>Add</b>.'
+                    );
+
+                btnCloseInstallGuide.innerText = 'Faham';
+            }
+
+            // Android Samsung Internet
+            else if (device.isAndroid && device.isSamsungInternet) {
+                installGuideIcon.innerHTML =
+                    '<i class="fa-solid fa-mobile-screen-button"></i>';
+
+                installGuideIcon.className =
+                    'flex h-20 w-20 items-center justify-center rounded-3xl bg-violet-100 text-4xl text-violet-700';
+
+                installGuideTitle.innerText =
+                    'Pasang pada Android';
+
+                installGuideIntro.innerText =
+                    'Gunakan pilihan pemasangan dalam Samsung Internet.';
+
+                installGuideSteps.innerHTML =
+                    createInstallStep(
+                        '1',
+                        'Tekan menu browser atau ikon pemasangan pada bar alamat.'
+                    ) +
+                    createInstallStep(
+                        '2',
+                        'Pilih <b>Add to Home screen</b> atau <b>Install app</b>.'
+                    ) +
+                    createInstallStep(
+                        '3',
+                        'Tekan <b>Install</b> atau <b>Add</b> untuk sahkan.'
+                    );
+
+                btnCloseInstallGuide.innerText = 'Faham';
+            }
+
+            // Android Chrome, Edge atau browser Android lain
+            else if (device.isAndroid) {
+                installGuideIcon.innerHTML =
+                    '<i class="fa-brands fa-android"></i>';
+
+                installGuideIcon.className =
+                    'flex h-20 w-20 items-center justify-center rounded-3xl bg-emerald-100 text-4xl text-emerald-700';
+
+                installGuideTitle.innerText =
+                    'Pasang pada Android';
+
+                installGuideIntro.innerText =
+                    'Ikuti langkah berikut untuk memasang Hub Koko pada telefon.';
+
+                installGuideSteps.innerHTML =
+                    createInstallStep(
+                        '1',
+                        'Tekan menu tiga titik <b>(⋮)</b> di penjuru kanan atas browser.'
+                    ) +
+                    createInstallStep(
+                        '2',
+                        'Pilih <b>Install app</b> atau <b>Add to Home screen</b>.'
+                    ) +
+                    createInstallStep(
+                        '3',
+                        'Tekan <b>Install</b> atau <b>Add</b> untuk letakkan ikon Hub Koko pada telefon.'
+                    );
+
+                btnCloseInstallGuide.innerText = 'Faham';
+            }
+
+            // Komputer Windows
+            else if (device.isWindows) {
+                installGuideIcon.innerHTML =
+                    '<i class="fa-solid fa-desktop"></i>';
+
+                installGuideIcon.className =
+                    'flex h-20 w-20 items-center justify-center rounded-3xl bg-sky-100 text-4xl text-sky-700';
+
+                installGuideTitle.innerText =
+                    'Pasang pada Komputer';
+
+                installGuideIntro.innerText =
+                    'Gunakan Chrome atau Microsoft Edge untuk pasang Hub Koko sebagai aplikasi.';
+
+                installGuideSteps.innerHTML =
+                    createInstallStep(
+                        '1',
+                        'Buka portal menggunakan <b>Google Chrome</b> atau <b>Microsoft Edge</b>.'
+                    ) +
+                    createInstallStep(
+                        '2',
+                        'Klik ikon pemasangan pada hujung bar alamat atau buka menu tiga titik <b>(⋮)</b>.'
+                    ) +
+                    createInstallStep(
+                        '3',
+                        'Pilih <b>Install Hub Koko</b> atau <b>Install this site as an app</b>.'
+                    );
+
+                btnCloseInstallGuide.innerText = 'Faham';
+            }
+
+            // Mac atau komputer lain
+            else {
+                installGuideIcon.innerHTML =
+                    '<i class="fa-solid fa-laptop"></i>';
+
+                installGuideIcon.className =
+                    'flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-200 text-4xl text-slate-700';
+
+                installGuideTitle.innerText =
+                    'Pasang Hub Koko';
+
+                installGuideIntro.innerText =
+                    'Gunakan browser moden untuk memasang Hub Koko sebagai aplikasi.';
+
+                installGuideSteps.innerHTML =
+                    createInstallStep(
+                        '1',
+                        'Buka portal menggunakan Chrome, Edge atau Safari.'
+                    ) +
+                    createInstallStep(
+                        '2',
+                        'Cari ikon pemasangan pada bar alamat atau buka menu browser.'
+                    ) +
+                    createInstallStep(
+                        '3',
+                        'Pilih <b>Install app</b>, <b>Install this site as an app</b>, atau <b>Add to Dock</b>.'
+                    );
+
+                btnCloseInstallGuide.innerText = 'Faham';
+            }
+
+            installGuideModal.classList.remove('hidden');
+            installGuideModal.classList.add('flex');
+        }
+
+        function closeInstallGuide() {
+            if (installGuideModal) {
+                installGuideModal.classList.add('hidden');
+                installGuideModal.classList.remove('flex');
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredPrompt = event;
         });
 
         if (btnInstall) {
             btnInstall.addEventListener('click', async () => {
-                if (deferredPrompt) {
+                const device = getDeviceInfo();
+
+                // Chrome/Edge Android atau komputer:
+                // Jika browser sedia beri dialog rasmi, buka terus.
+                if (deferredPrompt && !device.isIOS) {
                     deferredPrompt.prompt();
+
                     const { outcome } = await deferredPrompt.userChoice;
+
                     if (outcome === 'accepted') {
-                        installBanner.classList.add('hidden');
+                        btnInstall.classList.add('hidden');
                     }
+
                     deferredPrompt = null;
-                } else {
-                    alert("Aplikasi mungkin sudah dipasang, atau pelayar anda memerlukan pemasangan manual:\n\n1. Tekan ikon menu tiga titik (⋮) di penjuru kanan atas pelayar.\n2. Pilih 'Install app' atau 'Add to Home screen'.");
+                    return;
+                }
+
+                // iPhone/iPad dan browser tanpa pop-up rasmi:
+                // Papar panduan ikut jenis peranti.
+                showInstallGuide();
+            });
+        }
+
+        if (btnCloseInstallGuide) {
+            btnCloseInstallGuide.addEventListener('click', closeInstallGuide);
+        }
+
+        if (installGuideModal) {
+            installGuideModal.addEventListener('click', (event) => {
+                if (event.target === installGuideModal) {
+                    closeInstallGuide();
                 }
             });
         }
 
+        window.addEventListener('appinstalled', () => {
+            if (btnInstall) {
+                btnInstall.classList.add('hidden');
+            }
+        });
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('SW aktif:', reg.scope))
-                    .catch(err => console.log('SW ralat:', err));
+                    .then(reg => console.log('Service Worker aktif:', reg.scope))
+                    .catch(err => console.log('Service Worker ralat:', err));
             });
         }
     </script>
