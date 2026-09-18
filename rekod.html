@@ -10,7 +10,7 @@
   <!-- 2. FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- 3. Pustaka JS (Bootstrap Bundle, Chart.js, SweetAlert2) -->
+  <!-- 3. Pustaka JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -28,7 +28,7 @@
       color: #334155;
     }
     .navbar-custom {
-      background: linear-gradient(135deg, #1e293b, #0f172a);
+      background: linear-gradient(135deg, #1e293b, #0f172a);\
       border-bottom: 3px solid var(--accent-color);
     }
     .kpi-card {
@@ -449,20 +449,10 @@
     </div>
   </div>
 
-  <!-- LOGIK JAVASCRIPT FRONTEND (UNTUK GITHUB PAGES DENGAN PROXY) -->
+  <!-- LOGIK JAVASCRIPT FRONTEND DENGAN URL SEBENAR ANDA -->
   <script>
-    // ⚠️ GANTIKAN DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
-    const RAW_GAS_URL = https://script.google.com/macros/s/AKfycbzjLAcsk146B645GC2vFImq7Smv8utDjPdWocsyFp5UJuSrENnmIMJT3HGtzKHd_K1h/exec
-    "https://script.google.com/macros/s/AKfycbzjLAcsk146B645GC2vFImq7Smv8utDjPdWocsyFp5UJuSrENnmIMJT3HGtzKHd_K1h/exec";
-
-    // Fungsi pintar membina endpoint selamat tanpa sekatan CORS
-    function getApiUrl(params = "") {
-      let url = RAW_GAS_URL;
-      if (params) {
-        url += (url.includes("?") ? "&" : "?") + params;
-      }
-      return url;
-    }
+    // URL Web App Rasmi Anda
+    const RAW_GAS_URL = "https://script.google.com/macros/s/AKfycbzjLAcsk146B645GC2vFImq7Smv8utDjPdWocsyFp5UJuSrENnmIMJT3HGtzKHd_K1h/exec";
 
     let globalMurid = [];
     let globalRekod = [];
@@ -489,68 +479,45 @@
       muatDataSemula();
     });
 
+    // PANGGILAN DATA MENGGUNAKAN JSONP
     function muatDataSemula() {
       tunjukLoading(true);
 
-      if (!RAW_GAS_URL || RAW_GAS_URL.includes("MASUKKAN_URL")) {
+      const oldScript = document.getElementById('jsonp_data_script');
+      if (oldScript) oldScript.remove();
+
+      const script = document.createElement('script');
+      script.id = 'jsonp_data_script';
+      const sep = RAW_GAS_URL.includes('?') ? '&' : '?';
+      script.src = RAW_GAS_URL + sep + 'callback=terimaDataDariSheet&_=' + new Date().getTime();
+
+      script.onerror = function() {
         tunjukLoading(false);
-        Swal.fire('Konfigurasi Diperlukan', 'Sila masukkan URL Web App Apps Script anda pada baris RAW_GAS_URL di GitHub.', 'info');
+        Swal.fire('Ralat Sambungan', 'Sila pastikan Web App Apps Script anda telah di-deploy dengan pilihan "Who has access: Anyone".', 'error');
+      };
+
+      document.body.appendChild(script);
+    }
+
+    // PENERIMA DATA JSONP (TUTUP LOADING SERTA-MERTA)
+    window.terimaDataDariSheet = function(data) {
+      if (!data) {
+        tunjukLoading(false);
         return;
       }
 
-      // Gunakan fetch dengan redirect follow yang serasi dengan Google 302
-      fetch(getApiUrl(), {
-        method: "GET",
-        mode: "cors",
-        redirect: "follow"
-      })
-      .then(res => {
-        if (!res.ok) throw new Error("Respons HTTP tidak berjaya: " + res.status);
-        return res.json();
-      })
-      .then(data => {
-        globalMurid = data.murid || [];
-        globalRekod = data.rekod || [];
-        globalPertandingan = data.pertandingan || [];
-        filteredRekod = [...globalRekod];
+      globalMurid = data.murid || [];
+      globalRekod = data.rekod || [];
+      globalPertandingan = data.pertandingan || [];
+      filteredRekod = [...globalRekod];
 
-        try { isiDropdowns(); } catch (e) { console.warn(e); }
-        try { kemaskiniKPI(); } catch (e) { console.warn(e); }
-        try { binaCarta(); } catch (e) { console.warn(e); }
-        try { paparJadual(filteredRekod); } catch (e) { console.warn(e); }
+      try { isiDropdowns(); } catch (e) { console.warn(e); }
+      try { kemaskiniKPI(); } catch (e) { console.warn(e); }
+      try { binaCarta(); } catch (e) { console.warn(e); }
+      try { paparJadual(filteredRekod); } catch (e) { console.warn(e); }
 
-        tunjukLoading(false);
-      })
-      .catch(err => {
-        console.warn("Mencuba kaedah sandaran...", err);
-        // Kaedah Sandaran melalui AllOrigins jika browser menyekat terus
-        fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(getApiUrl()))
-          .then(res => res.json())
-          .then(data => {
-            globalMurid = data.murid || [];
-            globalRekod = data.rekod || [];
-            globalPertandingan = data.pertandingan || [];
-            filteredRekod = [...globalRekod];
-
-            try { isiDropdowns(); } catch (e) { console.warn(e); }
-            try { kemaskiniKPI(); } catch (e) { console.warn(e); }
-            try { binaCarta(); } catch (e) { console.warn(e); }
-            try { paparJadual(filteredRekod); } catch (e) { console.warn(e); }
-
-            tunjukLoading(false);
-          })
-          .catch(e2 => {
-            tunjukLoading(false);
-            console.error("Gagal kedua-dua kaedah:", e2);
-            Swal.fire({
-              icon: 'warning',
-              title: 'Perhatian',
-              text: 'Sila pastikan Web App Apps Script telah di-deploy sebagai "Who has access: Anyone".',
-              footer: '<small>Error: ' + err.message + '</small>'
-            });
-          });
-      });
-    }
+      tunjukLoading(false);
+    };
 
     function tunjukLoading(show) {
       document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
@@ -873,8 +840,7 @@
       tunjukLoading(true);
       modalRekodBS.hide();
 
-      // Hantar data guna POST text/plain untuk elak sekat CORS
-      fetch(getApiUrl(), {
+      fetch(RAW_GAS_URL, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -973,8 +939,7 @@
       tunjukLoading(true);
       modalPukalBS.hide();
 
-      // Hantar data guna POST text/plain untuk elak sekat CORS
-      fetch(getApiUrl(), {
+      fetch(RAW_GAS_URL, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -1066,7 +1031,7 @@
       }).then((result) => {
         if (result.isConfirmed) {
           tunjukLoading(true);
-          fetch(getApiUrl(), {
+          fetch(RAW_GAS_URL, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -1118,7 +1083,7 @@
         if (result.isConfirmed) {
           tunjukLoading(true);
           const emptyList = ids.map(id => ({ idMurid: id, namaMurid: "" }));
-          fetch(getApiUrl(), {
+          fetch(RAW_GAS_URL, {
             method: "POST",
             mode: "no-cors",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
